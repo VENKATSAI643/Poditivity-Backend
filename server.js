@@ -5,18 +5,13 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken'); 
 const fileRoutes = require('./routes/fileRoutes');
 const app = express();
-const socketIo=require('socket.io');
 const taskRoutes=require('./routes/taskRoutes');
-const http = require('http');
+const WebSocket = require('ws');
+
 
 connectDB();
 
 app.use(express.json());
-
-
-const server = http.createServer(app);
-const io = socketIo(server);
-app.io = io;
 
 
 const authenticateJWT = (req, res, next) => {
@@ -38,9 +33,20 @@ app.get('/api/protected', authenticateJWT, (req, res) => {
     res.json({ message: 'Protected content', user: req.user });
 });
 
-io.on('connection', (socket) => {
-    console.log('A user connected:', socket.id);
-});
+const wss = new WebSocket.Server({ port: 8080 });
+wss.on('connection', (ws) => {
+    console.log('New client connected');
+    ws.send('Welcome to the WebSocket server!');
+    ws.on('message', (message) => {
+        console.log(`Received: ${message}`);
+        ws.send(`Server received: ${message}`);
+    });
+    ws.on('close', () => {
+        console.log('Client disconnected');
+      });
+    });
+    
+    console.log('WebSocket server is running on ws://localhost:8080');
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
