@@ -1,8 +1,6 @@
-// controllers/fileController.js
 const multer = require('multer');
 const File = require('../models/File');
 
-// Configure multer for file storage in the /uploads directory
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads/');
@@ -14,7 +12,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single('file');
 
-// File upload handler
 const uploadFile = (req, res) => {
     upload(req, res, async (err) => {
         if (err) {
@@ -37,13 +34,11 @@ const uploadFile = (req, res) => {
     });
 };
 
-// File list handler
 const listFiles = async (req, res) => {
     const files = await File.find({ userId: req.user._id });
     res.status(200).json(files);
 };
 
-// File download handler
 const downloadFile = (req, res) => {
     const filePath = `./uploads/${req.params.filename}`;
     res.download(filePath);

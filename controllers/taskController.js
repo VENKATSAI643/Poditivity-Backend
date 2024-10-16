@@ -1,7 +1,5 @@
-// controllers/taskController.js
 const Task = require('../models/taskModel');
 
-// Create a new task
 exports.createTask = async (req, res) => {
     try {
         const { title, description, userId } = req.body;
@@ -9,7 +7,6 @@ exports.createTask = async (req, res) => {
         const newTask = new Task({ title, description, userId });
         await newTask.save();
 
-        // Emit task creation notification (if using Socket.io)
         req.app.io.emit('taskCreated', newTask);
 
         res.status(201).json({
@@ -24,7 +21,6 @@ exports.createTask = async (req, res) => {
     }
 };
 
-// Update an existing task
 exports.updateTask = async (req, res) => {
     try {
         const { taskId } = req.params;
@@ -38,7 +34,6 @@ exports.updateTask = async (req, res) => {
             updatedAt: Date.now()
         }, { new: true });
 
-        // Emit task update notification (if using Socket.io)
         req.app.io.emit('taskUpdated', updatedTask);
 
         res.status(200).json({
@@ -53,7 +48,6 @@ exports.updateTask = async (req, res) => {
     }
 };
 
-// Get all tasks for a user
 exports.getTasks = async (req, res) => {
     try {
         const { userId } = req.params;
