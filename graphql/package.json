@@ -1,0 +1,14 @@
+{
+  "name": "graphql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc",
+    "start": "npm run compile && node ./dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "type": "module"
+}
